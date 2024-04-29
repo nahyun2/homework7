@@ -157,9 +157,9 @@ int insertFirst(headNode* h, int key) {
 /* 리스트를 검색하여, 입력받은 key보다 큰값이 나오는 노드 바로 앞에 삽입 */
 int insertNode(headNode* h, int key)
 {	//노드 생성부분
-	listNode* node = (listNode*)malloc(sizeof(listNode));
-	node->key = key;
-	node->link = NULL;
+	listNode* node = (listNode*)malloc(sizeof(listNode)); //리스트노드 구조체 크기만큼 동적 할당
+	node->key = key; //입력받은 key값을 노드의 key에 저장
+	node->link = NULL; //노드의 link는 NULL로 초기화
 
 	if(h->first == NULL) // 헤드가 아무것도 가리키지 않는다면 == 리스트가 비어있다면
 	{
@@ -217,7 +217,7 @@ int insertLast(headNode* h, int key)
 	listNode* p = NULL; //구조체포인터 p를 생성하고 NULL로 초기화
 	p = h->first; //p가 리스트의 첫번째 노드를 가리키도록 함
 
-	while(p->link != NULL) //p의 link가 NULL이 될 때까지 반복, 리스트의 마지막 노드를 찾는 과정
+	while(p->link != NULL) //p의 link가 NULL이 될 때까지 반복, 리스트의 마지막 노드에 도달하게 됨
 	{
 		p = p->link; 
 	}
@@ -255,39 +255,39 @@ int deleteFirst(headNode* h)
  * list에서 key에 대한 노드 삭제
  */
 int deleteNode(headNode* h, int key) {
-	if(h->first == NULL)
+	if(h->first == NULL) //헤드가 가리키는 노드가 비어있으면 리스트가 비어있음
 	{
 		printf("삭제할 리스트가 없습니다.\n");
 		return 0;
 	}
 
-	listNode* p = NULL;
-	listNode* tail = NULL;
-	p = h->first;
-	tail = h->first;
+	listNode* p = NULL; //리스트노드 구조체포인터 p를 생성하고 NULL로 초기화
+	listNode* tail = NULL; //리스트노드 구조체포인터 tail을 생성하고 NULL로 초기화
+	p = h->first; //p가 리스트의 첫번째 노드를 가리키도록 함
+	tail = h->first; //tail이 리스트의 첫번째 노드를 가리키도록 함
 
-	while(p != NULL)
+	while(p != NULL) //p가 NULL이 아니면 반복, 리스트의 끝까지 반복함
 	{
-		if(p->key == key)
+		if(p->key == key) //p가 가리키는 노드의 key값이 입력받은 key값과 같다면
 		{
-			if(p == h->first)
+			if(p == h->first) //p가 리스트의 첫번째 노드를 가리키고 있다면
 			{
-				h->first = p->link;
-				free(p);
+				h->first = p->link; //헤드가 p의 다음 노드를 가리키도록 함
+				free(p); //p가 가리키는 노드를 동적 할당 해제
 				return 0;
 			}
 			
-			tail->link = p->link;
-			free(p);
+			tail->link = p->link; //tail이 p의 다음 노드를 가리키도록 함
+			free(p); //p가 가리키는 노드를 동적 할당 해제
 			return 0;
 		}
 		
-		tail = p;
-		p = p->link;
+		tail = p; //tail을 p의 위치로 이동
+		p = p->link; //p를 다음 노드의 위치로 이동
 
 	}
 
-	printf("cannot find node for key.\n");	
+	printf("cannot find node for key.\n"); //입력받은 key값을 가진 노드를 찾지 못했을 경우
 	return 0;
 
 }
@@ -296,30 +296,30 @@ int deleteNode(headNode* h, int key) {
  * list의 마지막 노드 삭제
  */
 int deleteLast(headNode* h) {
-	if(h->first == NULL)
+	if(h->first == NULL) //헤드가 가리키는 노드가 비어있으면 리스트가 비어있음
 	{
 		printf("삭제할 리스트가 없습니다.\n");
 		return 0;
 	}
 
-	listNode *p = h->first;
-	listNode *tail = NULL;
+	listNode *p = h->first; //리스트노드 구조체포인터 p를 생성하고 리스트의 첫번째 노드를 가리키도록 함
+	listNode *tail = NULL; //리스트노드 구조체포인터 tail을 생성하고 NULL로 초기화
 
-	if(p->link == NULL)
+	if(p->link == NULL) //리스트에 노드가 한개만 있을 경우
 	{
-		h->first == NULL;
-		free(p);
+		h->first == NULL; //헤드가 NULL을 가리키도록 하여 리스트를 비움
+		free(p); //노드를 동적 할당 해제
 		return 0;
 	}
 
-	while(p->link != NULL)
+	while(p->link != NULL) //p의 link가 NULL이 될 때까지 반복, 리스트의 마지막 노드를 찾는 과정
 	{
-		tail = p;
-		p = p->link;
+		tail = p; //tail을 p의 위치로 이동
+		p = p->link; //p를 다음 노드의 위치로 이동
 	}
 	
-	tail->link = NULL;
-	free(p);
+	tail->link = NULL; //tail의 link를 NULL로 초기화하여 마지막 노드를 삭제
+	free(p); //p가 가리키는 노드를 동적 할당 해제
 	return 0;
 }
 
@@ -328,27 +328,27 @@ int deleteLast(headNode* h) {
  * 리스트의 링크를 역순으로 재 배치
  */
 int invertList(headNode* h) {
-	if(h->first == NULL)
+	if(h->first == NULL) //헤드가 가리키는 노드가 비어있으면 리스트가 비어있음
 	{
 		printf("역순할 리스트가 없습니다.\n");
 		return 0;
 	}
 
-	listNode *a = h->first;
-	listNode *b = h->first;
-	listNode *c = h->first;
+	listNode *a = h->first; //b의 이전 노드를 가리킬 구조체포인터 a 생성
+	listNode *b = h->first; //c의 이전 노드를 가리킬 구조체포인터 b 생성
+	listNode *c = h->first; //리스트의 끝까지 이동할 구조체포인터 c 생성
 
-	while(c != NULL)
+	while(c != NULL) //c가 NULL이 아니면 반복, 리스트의 끝까지 반복을 의미
 	{
 	
-		a = b;
-		b = c;
-		c = c->link;
-		b->link = a;
+		a = b; //a를 b의 위치로 이동
+		b = c; //b를 c의 위치로 이동
+		c = c->link; //c를 다음 노드의 위치로 이동
+		b->link = a; //b의 link가 이전 노드를 가리키도록 함
 	}
 
-	h->first->link = NULL;
-	h->first = b;
+	h->first->link = NULL; //루프를 빠져나오면 헤드부분이 리스트의 끝이므로 NULL로 초기화
+	h->first = b; //b가 시작위치이므로 헤드가 b를 가리키도록 함
 
 	return 0;
 }
